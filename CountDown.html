@@ -1,0 +1,119 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <style>
+        /* Reset default styles */
+        body,
+        h1,
+        p,
+        input,
+        button {
+            margin: 0;
+            padding: 0;
+            font-family: Arial, sans-serif;
+        }
+
+        .countdown-container {
+            text-align: center;
+            padding: 40px;
+        }
+
+        h1 {
+            margin-bottom: 20px;
+        }
+
+        .input-container {
+            margin-bottom: 20px;
+        }
+
+        label {
+            display: block;
+            margin-bottom: 5px;
+        }
+
+        input {
+            padding: 8px;
+            width: 80px;
+            text-align: center;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+            font-size: 16px;
+        }
+
+        button {
+            padding: 8px 15px;
+            background-color: #007bff;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 16px;
+        }
+
+        .timer p {
+            font-size: 36px;
+            font-weight: bold;
+        }
+    </style>
+    <title>Countdown Timer</title>
+</head>
+
+<body>
+    <div class="countdown-container">
+        <h1>Countdown Timer</h1>
+        <div class="input-container">
+            <label for="time-input">Set Timer (minutes):</label>
+            <input type="number" id="time-input" min="1" step="1">
+            <button id="start-btn">Start Countdown</button>
+        </div>
+        <div class="timer" id="timer">
+            <p>00:00</p>
+        </div>
+    </div>
+    <script>
+        const timeInput = document.getElementById("time-input");
+        const startButton = document.getElementById("start-btn");
+        const timerElement = document.getElementById("timer");
+
+        let countdown;
+
+        startButton.addEventListener("click", startCountdown);
+
+        function startCountdown() {
+            const timeInMinutes = parseInt(timeInput.value, 10);
+
+            if (isNaN(timeInMinutes) || timeInMinutes <= 0) {
+                return;
+            }
+
+            const endTime = new Date().getTime() + timeInMinutes * 60 * 1000;
+
+            clearInterval(countdown);
+
+            countdown = setInterval(updateTimer, 1000, endTime);
+        }
+
+        function updateTimer(endTime) {
+            const currentTime = new Date().getTime();
+            const remainingTime = endTime - currentTime;
+
+            if (remainingTime <= 0) {
+                clearInterval(countdown);
+                timerElement.innerHTML = "Time's up!";
+                return;
+            }
+
+            const minutes = Math.floor(remainingTime / (1000 * 60));
+            const seconds = Math.floor((remainingTime % (1000 * 60)) / 1000);
+
+            const formattedTime = `${String(minutes).padStart(2, "0")}:${String(seconds).padStart(2, "0")}`;
+            timerElement.innerHTML = formattedTime;
+        }
+
+    </script>
+</body>
+
+</html>
